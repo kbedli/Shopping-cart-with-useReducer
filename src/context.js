@@ -1,8 +1,7 @@
-import React, { useContext, useReducer, useEffect } from "react";
+import React, { useState, useContext, useReducer, useEffect } from "react";
 import cartItems from "./data";
 import reducer from "./reducer";
-
-const url = "https://course-api.com/react-useReducer-cart-project";
+import data from "./data";
 
 const AppContext = React.createContext();
 
@@ -28,13 +27,14 @@ const AppProvider = ({ children }) => {
   const decrease = (id) => {
     dispatch({ type: "DECREASE", payload: id });
   };
-  const fetchData = async () => {
+  const fetchData = () => {
     dispatch({ type: "LOADING" });
-    const response = await fetch(url);
-    const cart = await response.json();
-    dispatch({ type: "DISPLAY_ITEMS", payload: cart });
-  };
 
+    dispatch({ type: "DISPLAY_ITEMS", payload: data });
+  };
+  const toggleAmount = (id, type) => {
+    dispatch({ type: "TOGGLE_AMOUNT", payload: { id, type } });
+  };
   useEffect(() => {
     fetchData();
   }, []);
@@ -50,6 +50,7 @@ const AppProvider = ({ children }) => {
         remove,
         increase,
         decrease,
+        toggleAmount,
       }}
     >
       {children}
